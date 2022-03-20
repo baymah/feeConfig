@@ -3,6 +3,7 @@ const fs = require("fs");
 const configObject = require("../config.json");
 const router = express.Router();
 
+const path = "./config.json";
 router.post("/fees", (req, res) => {
   let { FeeConfigurationSpec } = req.body;
   let feeObject = [];
@@ -21,10 +22,15 @@ router.post("/fees", (req, res) => {
       feeValue: string.split(" ")[7],
     });
   });
-  fs.writeFile("config.json", JSON.stringify(feeObject), (err) => {
-    if (err) return err;
+  fs.unlink(path, function (err) {
+    if (err) throw err;
+    // if no error, file has been deleted successfully
+    console.log("Fee configuration file... deleted!");
+    fs.writeFile(path, JSON.stringify(feeObject), (err) => {
+      if (err) return err;
+    });
+    res.send({ FeeConfigurationSpec: feeObject });
   });
-  res.send({ FeeConfigurationSpec: feeObject });
 });
 
 router.post("/compute-transaction-fee", (req, res) => {
@@ -42,7 +48,7 @@ router.post("/compute-transaction-fee", (req, res) => {
       return getGeneralLocale(co, PaymentEntity);
     });
   }
-//   console.log(getFeeConfigLocale, "getFeeConfigLocale");
+  //   console.log(getFeeConfigLocale, "getFeeConfigLocale");
 
   if (getFeeConfigLocale.length) {
     getFeeEntity = configObject.filter((co) => {
@@ -74,8 +80,8 @@ router.post("/compute-transaction-fee", (req, res) => {
   ) {
     res.status(404).send("No Configuration Settings found");
   }
-//   console.log(getFeeEntity, "getFeeEntity");
-//   console.log(getEntityProperty, "getEntityProperty");
+  //   console.log(getFeeEntity, "getFeeEntity");
+  //   console.log(getEntityProperty, "getEntityProperty");
 
   AppliedFeeValue =
     getEntityProperty.feeType === "FLAT_PERC"
