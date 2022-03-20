@@ -1,0 +1,7 @@
+[
+    {"feeId":"LNPY1221","feeCurrency":"NGN","feeLocale":"*","feeEntity":"*","entityProperty":"*","feeType":"PERC","feeValue":"1.4"},
+    {"feeId":"LNPY1222","feeCurrency":"NGN","feeLocale":"INTL","feeEntity":"CREDIT-CARD","entityProperty":"VISA","feeType":"PERC","feeValue":"5.0"},
+    {"feeId":"LNPY1223","feeCurrency":"NGN","feeLocale":"LOCL","feeEntity":"CREDIT-CARD", "entityProperty":"*",  "feeType":"FLAT_PERC","feeValue":"50:1.4"},
+    {"feeId":"LNPY12267","feeCurrency":"NGN","feeLocale":"LOCL","feeEntity":"USSD", "entityProperty":"*",  "feeType":"FLAT_PERC","feeValue":"50:1.4"},
+    {"feeId":"LNPY1224","feeCurrency":"NGN","feeLocale":"*","feeEntity":"BANK-ACCOUNT","entityProperty":"*","feeType":"FLAT","feeValue":"100"}
+]
