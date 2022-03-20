@@ -45,7 +45,7 @@ router.post("/compute-transaction-fee", (req, res) => {
   });
   if (!getFeeConfigLocale.length) {
     getFeeConfigLocale = configObject.filter((co) => {
-      return getGeneralLocale(co, PaymentEntity);
+      return getGenericLocale(co, PaymentEntity);
     });
   }
   //   console.log(getFeeConfigLocale, "getFeeConfigLocale");
@@ -55,10 +55,11 @@ router.post("/compute-transaction-fee", (req, res) => {
       return getSpecificFeeEntity(co, PaymentEntity);
     });
   }
+  const secondStage = getFeeEntity;
 
   if (!getFeeEntity.length) {
     getFeeEntity = configObject.filter((co) => {
-      return getGeneralFeeEntity(co, PaymentEntity);
+      returnic(co, PaymentEntity);
     });
   }
 
@@ -67,21 +68,33 @@ router.post("/compute-transaction-fee", (req, res) => {
       return getSpecificEntityProperty(co, PaymentEntity);
     });
   }
+  console.log(getFeeEntity, "getFeeEntitymmkmkm1",secondStage);
+  if (!getEntityProperty.length && getFeeEntity.length) {
+    getFeeEntity = configObject.filter((co) => {
+      return getGenericFeeEntity(co, PaymentEntity);
+    });
+  }
+
+  console.log(getFeeEntity, "getFeeEntitymmkmkm");
 
   if (!getEntityProperty.length) {
+    console.log("Control reaches here...");
     getEntityProperty = getFeeEntity.filter((co) => {
       return getGenericEntityProperty(co, PaymentEntity);
     });
   }
+
+  console.log(getEntityProperty, "getEntity...");
+
   if (
     !getFeeConfigLocale.length ||
     !getFeeEntity.length ||
     !getEntityProperty
   ) {
-    res.status(404).send("No Configuration Settings found");
+    return res.status(404).send("No Configuration Settings found");
   }
-  //   console.log(getFeeEntity, "getFeeEntity");
-  //   console.log(getEntityProperty, "getEntityProperty");
+  console.log(getFeeEntity, "getFeeEntity");
+  console.log(getEntityProperty, "getEntityProperty");
 
   AppliedFeeValue =
     getEntityProperty.feeType === "FLAT_PERC"
@@ -117,7 +130,7 @@ function getTransactionLocale({ CurrencyCountry, PaymentEntity }) {
   return CurrencyCountry === PaymentEntity.Country ? "LOCL" : "INTL";
 }
 
-function getGeneralLocale(configObject, transactionObject) {
+function getGenericLocale(configObject, transactionObject) {
   for (const key in transactionObject) {
     if (
       configObject.feeLocale !== transactionObject[key] &&
@@ -127,7 +140,7 @@ function getGeneralLocale(configObject, transactionObject) {
   }
 }
 
-function getGeneralFeeEntity(configObject, transactionObject) {
+function getGenericFeeEntity(configObject, transactionObject) {
   for (const key in transactionObject) {
     if (
       configObject.feeEntity !== transactionObject[key] &&
